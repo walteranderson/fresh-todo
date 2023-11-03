@@ -1,6 +1,7 @@
+// TODO: default path is a mysterious directory, supply env var to override to current dir
 export const kv = await Deno.openKv();
 
-type Todo = {
+export type Todo = {
   id?: string;
   text: string;
   completed: boolean;
