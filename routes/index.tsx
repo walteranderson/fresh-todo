@@ -1,7 +1,8 @@
-import { Handlers, PageProps, RouteContext } from "$fresh/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import * as db from "@/util/db.ts";
-import { Button } from "@/components/Button.tsx";
-import { TextInput } from "@/components/TextInput.tsx";
+import { Button } from "@/components/button.tsx";
+import { TextInput } from "@/components/text-input.tsx";
+import TodoItem from "@/islands/todo-item.tsx";
 
 export const handler: Handlers = {
   async POST(req, ctx) {
@@ -20,7 +21,7 @@ export default async function Home() {
   return (
     <>
       <div class="px-4 py-8 mx-auto bg-[#86efac]">
-        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
+        <div class="max-w-screen-sm mx-auto flex flex-col items-center justify-center">
           <img
             class="mb-6"
             src="/logo.svg"
@@ -32,12 +33,12 @@ export default async function Home() {
         </div>
       </div>
 
-      <div class="mt-6 max-w-screen-md mx-auto flex flex-col items-center justify-content">
+      <div class="mt-6 max-w-[300px] mx-auto flex flex-col items-center justify-content">
         {todos.map((todo) => (
-          <p>{todo.text}</p>
+          <TodoItem value={todo} />
         ))}
 
-        <form method="post" class="flex flex-row gap-2">
+        <form method="post" class="flex flex-row gap-2 mt-4">
           <TextInput type="text" name="text" placeholder="Add a new todo" />
           <Button type="submit">Save</Button>
         </form>

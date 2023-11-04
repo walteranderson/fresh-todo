@@ -29,5 +29,8 @@ export const todos = {
   update: async (id: string, todo: Todo) => {
     await kv.set(["todos", id], todo);
     return todo;
+  },
+  delete: async (id: string) => {
+    await kv.delete(["todos", id]);
   }
 };
