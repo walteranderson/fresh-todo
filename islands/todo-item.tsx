@@ -1,4 +1,5 @@
 import { Todo } from "@/util/db.ts";
+import { useState } from "preact/hooks";
 import { CheckSquare, Square, Trash2 } from "lucide-preact";
 import { ComponentChildren } from "preact";
 
@@ -25,14 +26,15 @@ function IconButton(props: IconButtonProps) {
 
 export default function TodoItem(props: TodoItemProps) {
   const { value } = props;
+  const [completed, setCompleted] = useState(value.completed);
 
   const onComplete = async () => {
     const res = await fetch(`/api/todos/${value.id}`, {
       method: "PUT",
-      body: JSON.stringify({ ...value, completed: !value.completed }),
+      body: JSON.stringify({ ...value, completed: !completed }),
     });
     const todo = await res.json();
-    console.log("onComplete", todo);
+    setCompleted(todo.completed);
   };
   const onDelete = async () => {
     await fetch(`/api/todos/${value.id}`, {
@@ -43,7 +45,7 @@ export default function TodoItem(props: TodoItemProps) {
   return (
     <div class="w-full flex flex-row gap-2">
       <IconButton className="hover:bg-gray-200" onClick={onComplete}>
-        {value.completed ? <CheckSquare /> : <Square />}
+        {completed ? <CheckSquare /> : <Square />}
       </IconButton>
       <span class="flex-1">{value.text}</span>
       <IconButton className="text-red-500 hover:bg-red-200" onClick={onDelete}>
