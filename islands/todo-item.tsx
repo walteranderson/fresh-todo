@@ -1,5 +1,5 @@
 import { Todo } from "@/util/db.ts";
-import { Square, CheckSquare, Trash2 } from "lucide-preact";
+import { CheckSquare, Square, Trash2 } from "lucide-preact";
 import { ComponentChildren } from "preact";
 
 export type TodoItemProps = {
@@ -14,7 +14,10 @@ type IconButtonProps = {
 
 function IconButton(props: IconButtonProps) {
   return (
-    <button class={`rounded p-0.5 ${props.className || ""}`}>
+    <button
+      onClick={props.onClick}
+      class={`rounded p-0.5 ${props.className || ""}`}
+    >
       {props.children}
     </button>
   );
@@ -23,11 +26,18 @@ function IconButton(props: IconButtonProps) {
 export default function TodoItem(props: TodoItemProps) {
   const { value } = props;
 
-  const onComplete = () => {
-    //
+  const onComplete = async () => {
+    const res = await fetch(`/api/todos/${value.id}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...value, completed: !value.completed }),
+    });
+    const todo = await res.json();
+    console.log("onComplete", todo);
   };
-  const onDelete = () => {
-    //
+  const onDelete = async () => {
+    await fetch(`/api/todos/${value.id}`, {
+      method: "DELETE",
+    });
   };
 
   return (
