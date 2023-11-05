@@ -27,6 +27,7 @@ function IconButton(props: IconButtonProps) {
 export default function TodoItem(props: TodoItemProps) {
   const { value } = props;
   const [completed, setCompleted] = useState(value.completed);
+  const [deleted, setDeleted] = useState(false);
 
   const onComplete = useCallback(async () => {
     const res = await fetch(`/api/todos/${value.id}`, {
@@ -41,7 +42,10 @@ export default function TodoItem(props: TodoItemProps) {
     await fetch(`/api/todos/${value.id}`, {
       method: "DELETE",
     });
-  }, [value]);
+    setDeleted(true);
+  }, [value, setDeleted]);
+
+  if (deleted) return null;
 
   return (
     <div class="w-full flex flex-row gap-2">
