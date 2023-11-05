@@ -34,10 +34,9 @@ export default async function Home() {
       </div>
 
       <div class="mt-6 max-w-[300px] mx-auto flex flex-col items-center justify-content">
-        {todos && todos.length > 0 ?
-        todos.map((todo) => (
-          <TodoItem value={todo} />
-        )) : <p class="text-gray-500">No todos yet</p>}
+        {todos && todos.length > 0
+          ? todos.map((todo) => <TodoItem value={todo} />)
+          : <p class="text-gray-500">No todos yet</p>}
 
         <form method="post" class="flex flex-row gap-2 mt-4">
           <TextInput type="text" name="text" placeholder="Add a new todo" />

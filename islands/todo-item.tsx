@@ -1,5 +1,5 @@
 import { Todo } from "@/util/db.ts";
-import { useState } from "preact/hooks";
+import { useCallback, useState } from "preact/hooks";
 import { CheckSquare, Square, Trash2 } from "lucide-preact";
 import { ComponentChildren } from "preact";
 
@@ -28,26 +28,29 @@ export default function TodoItem(props: TodoItemProps) {
   const { value } = props;
   const [completed, setCompleted] = useState(value.completed);
 
-  const onComplete = async () => {
+  const onComplete = useCallback(async () => {
     const res = await fetch(`/api/todos/${value.id}`, {
       method: "PUT",
       body: JSON.stringify({ ...value, completed: !completed }),
     });
     const todo = await res.json();
     setCompleted(todo.completed);
-  };
-  const onDelete = async () => {
+  }, [value]);
+
+  const onDelete = useCallback(async () => {
     await fetch(`/api/todos/${value.id}`, {
       method: "DELETE",
     });
-  };
+  }, [value]);
 
   return (
     <div class="w-full flex flex-row gap-2">
       <IconButton className="hover:bg-gray-200" onClick={onComplete}>
         {completed ? <CheckSquare /> : <Square />}
       </IconButton>
-      <span class="flex-1">{value.text}</span>
+      <span class={`flex-1` + (completed ? " line-through" : "")}>
+        {value.text}
+      </span>
       <IconButton className="text-red-500 hover:bg-red-200" onClick={onDelete}>
         <Trash2 />
       </IconButton>
